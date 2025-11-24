@@ -1,0 +1,4 @@
+cn,description,password,applicationName,environment
+bndapplication1d,Application 1 Dev Bind Account,changeit,Application1,DEV
+bndapplication1s,Application 1 Staging Bind Account,changeit,Application1,STG
+bndapplication1p,Application 1 Prod Bind Account,changeit,Application1,PRD

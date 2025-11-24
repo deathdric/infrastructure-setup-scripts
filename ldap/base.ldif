@@ -1,0 +1,34 @@
+# Users root unit
+dn: ou=users,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: users
+
+# Root unit for personal user accounts
+dn: ou=people,ou=users,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: people
+
+# Root unit for workload service accounts
+dn: ou=workloads,ou=users,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: workloads
+
+# Root unit for technical accounts using LDAP bind/search
+dn: ou=bindaccounts,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: bindaccounts
+
+# Root unit for technical accounts which perform write operations on LDAP
+dn: ou=operaccounts,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: operaccounts
+
+# Root unit for application groups
+dn: ou=groups,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: groups
+
+# Root unit for ldap-based groups
+dn: ou=ldapgroups,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: ldapgroups

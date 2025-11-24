@@ -1,0 +1,6 @@
+uid,firstName,lastName,password,email,teamName,profession
+usrbspade,Bob,Spade,changeit,bob.spade@deathshadow.org,Infrastructure,Infrastructure Administrator
+usraheart,Alice,Heart,changeit,alice.heart@deathshadow.org,Application1 Dev Team,Developer
+usrjfisherman,John,Fisherman,changeit,john.fisherman@deathshadow.org,Application1 Dev Team,Lead Developer
+usrrlakedweller,Raymond,Lakedweller,changeit,raymond.lakedweller@deathshadow.org,Operations Team,Operation Engineer
+usrmmchill,Melissa,Mc Hill,changeit,melissa.mchill@deathshadow.org,Operations Team,Lead Operation Engineer

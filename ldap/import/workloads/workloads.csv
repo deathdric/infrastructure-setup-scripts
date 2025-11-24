@@ -1,0 +1,4 @@
+uid,description,password,email,applicationName,environment
+svcapplication1d,Application 1 Dev Account,changeit,application1-dev@deathshadow.org,Application1,DEV
+svcapplication1s,Application 1 Staging Account,changeit,application-operators@deathshadow.org,Application1,STG
+svcapplication1p,Application 1 Prod Account,changeit,application-operators@deathshadow.org,Application1,PRD

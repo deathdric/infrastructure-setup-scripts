@@ -1,0 +1,5 @@
+group_name,user_id,user_type
+ldap_admins,usrbspade,people
+ldap_bind_accounts,bndapplication1d,bind
+ldap_bind_accounts,bndapplication1s,bind
+ldap_bind_accounts,bndapplication1p,bind

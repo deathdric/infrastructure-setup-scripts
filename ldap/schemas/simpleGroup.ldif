@@ -1,0 +1,9 @@
+dn: cn=simpleGroup,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: simpleGroup
+olcObjectClasses: ( 2.25.490593955079265822490679925952870192282
+  NAME 'simpleGroup'
+  SUP top
+  STRUCTURAL
+  MUST ( cn )
+  MAY ( member $ description ) )

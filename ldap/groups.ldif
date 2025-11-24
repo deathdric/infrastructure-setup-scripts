@@ -1,0 +1,9 @@
+# Root unit for ldap-based groups
+dn: ou=ldap,ou=groups,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: ldap
+
+# Root unit for application-based groups
+dn: ou=applications,ou=groups,dc=deathshadow,dc=org
+objectClass: organizationalUnit
+ou: applications
