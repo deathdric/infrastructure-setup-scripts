@@ -1,0 +1,3 @@
+- !grant
+  role: !group admin
+  member: !user usrbspade

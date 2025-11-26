@@ -1,0 +1,27 @@
+services:
+  conjur:
+     # NEVER use 'latest'. You want a deterministic behavior.
+    image: cyberark/conjur:1.24.0
+    container_name: conjur
+    command: server
+    environment:
+      # You'll need to replace the following :
+      # 'POSTGRES_ACCOUNT_LOGIN' with the database login you really use (should be public schema owner of the database)
+      # 'POSTGRES_ACCOUNT_PASSWORD' with the database password
+      # 'POSTGRES_DB_HOST' with the host of your database server
+      # 'conjur' with the name of the database you created
+      DATABASE_URL: postgres://POSTGRES_ACCOUNT_LOGIN:POSTGRES_ACCOUNT_PASSWORD@POSTGRES_DB_HOST:5432/conjur
+      PGSSLMODE: require
+      # You should replace the 'MY_ENCRYPT_KEY' value which the one you generated using 'data-key generate'
+      CONJUR_DATA_KEY: MY_ENCRYPT_KEY
+      # Here we configured 2 authentication methods :
+      # - authn is the default api key authentication method. Always have it active.
+      # - authn-ldap/deathshadow-ldap-server is the LDAP authentication. The `deathshadow-ldap-server` part will
+      #  reference a policy with the same name where LDAP configuration will be setup. You may change the name for a one
+      #  which fits you better.
+      CONJUR_AUTHENTICATORS: authn-ldap/deathshadow-ldap-server,authn
+      CONJUR_TELEMETRY_ENABLED: 'false'
+      CONJUR_API_RESOURCE_LIST_LIMIT_MAX: 5000
+    restart: on-failure
+    ports:
+      - "25080:80"

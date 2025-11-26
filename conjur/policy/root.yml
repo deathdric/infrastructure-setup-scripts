@@ -1,0 +1,21 @@
+# root.yml
+# Defines a group for administrators in order to avoid having to use the admin account
+- !group admin
+- !permit
+  role: !group admin
+  privileges: [ read, create, update ]
+  resource: !policy root
+# This policy will be used to configure LDAP authentication
+- !policy
+  id: conjur
+  owner: !group admin
+  body:
+    - !policy authn-ldap
+# This group will be needed to define all users who can use ldap authentication
+- !group
+  id: all-ldap-users
+  owner: !group admin
+# This is the parent policy for application-based policies
+- !policy
+  id: app
+  owner: !group admin

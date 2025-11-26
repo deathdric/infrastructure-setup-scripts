@@ -29,9 +29,9 @@ dc=deathshadow,dc=org
 |   |- ou=workloads
 |   |   |- uid=svcapplication1d
 |- ou=bindaccounts
-|   |- uid=bndapplication1d   
+|   |- cn=bndapplication1d   
 |- ou=operaccounts
-|   |- uid=oprcustominfra
+|   |- cn=oprcustominfra
 |- ou=groups
 |   |- ou=application1
 |        |- cn=application1_users

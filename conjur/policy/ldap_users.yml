@@ -1,0 +1,15 @@
+# Adds the users (conjur will not do LDAP lookups for retrieivng the list of users)
+- !user usrbspade
+- !user usraheart
+- !user usrjfisherman
+- !user usrrlakedweller
+- !user usrmmchill
+# Adds those same users to the `all-ldap-users` in order to grant them the permission to connect to LDAP.
+- !grant
+  role: !group all-ldap-users
+  members:
+  - !user usrbspade
+  - !user usraheart
+  - !user usrjfisherman
+  - !user usrrlakedweller
+  - !user usrmmchill

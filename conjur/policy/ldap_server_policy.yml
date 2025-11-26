@@ -1,0 +1,34 @@
+- !policy
+  # This name must match with the one set as CONJUR_AUTHENTICATORS in the docker-compose.yml file
+  id: deathshadow-ldap-server
+  body:
+    - !host
+    - !webservice
+      owner: !host
+      annotations:
+        # the base dn to use for search
+        ldap-authn/base_dn: ou=users,dc=deathshadow,dc=org
+        # the FQDN of the ldap account used for binding
+        ldap-authn/bind_dn: cn=bndconjurp,ou=bindaccounts,dc=deathshadow,dc=org
+        # whether you use TLS or plaintext
+        ldap-authn/connect_type: plain
+        # your LDAP host (repace LDAP_HOST with the one of your ldap server)
+        ldap-authn/host: LDAP_HOST
+        # the LDAP port, usually 389 (or 636 for ldaps)
+        ldap-authn/port: 389
+        # template to use for LDAP queries
+        ldap-authn/filter_template: (&(objectClass=person)(uid=%s))
+  # The following stuff defines which groups/users can be authenticated agains ldap, hense the all_ldap_users group defined
+  # in the root policy
+    - !group clients
+    - !permit
+      role: !group clients
+      privilege: [ read, authenticate ]
+      resource: !webservice
+    - !grant
+      role: !group clients
+      member: !group /all-ldap-users
+  # We don't hardcode the password of the bind account in policy. We will set the variable once the policy is applied.
+    - !variable
+      id: bind-password
+      owner: !host
