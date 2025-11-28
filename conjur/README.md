@@ -333,7 +333,7 @@ Finally, login as usrbspade using the following command :
 conjur login -i usrbspade
 ```
 
-Input the password of the userbspace account when asked. If you have the `Logged in` message, you won. Good news it :
+Input the password of the userbspade account when asked. If you have the `Logged in` message, you won. Good news is :
 you won't need to use the `admin` account for a while now.
 
 If you need to use an API key for this used and you don't have it, you can reset the API key by running `conjur user rotate-api-key`.
@@ -342,5 +342,68 @@ log in afterward using your LDAP credentials).
 
 ### Application policies setup
 
-Coming next ...
+#### Environments and groups
 
+We will not setup the policy for our first application, called `application1`.
+
+All application policies will have the `app` parent policy and will be owned by the `admin` group. We will later define
+subpolicies owned by dev and ops users which wil allow them to set and fetch their credentials.
+
+First, let's setup the root `application1` policy defined in [this file](policy/application1.yml). Run the following
+command with the `usrbspade` user :
+
+```
+conjur policy load -b app -f application1.yml
+```
+
+The policy is currently empty, we will fill it from [another file](policy/application-template.yml) which can be applied
+for any created application. It will define :
+
+- The `dev`, `stg` and `prd` environment-based sub policies
+- The `dev-owners` group, which will have ownership of `dev` credentials
+- The `dev-users` group, which will have access to the `dev` credentials
+- The `ops-owners` group, which will have ownership of `stg` and `prd` credentials
+- The `ops-users` group, which will have access to the `stg` and `prd4` credentials
+- Composite groups like `all-dev`, `all-ops` and `all-users`
+
+Note that all groups defined above are local to the application (e.g. : the `dev-owners` group fully qualified name is
+`app/application1/dev-owners`). If we create a second application, we will define different groups.
+
+In order to update the policy, run the following :
+
+```
+conjur policy load -b app/application1 -f application-template.yml
+```
+
+Now that we have defined groups, we need to setup membership. This will be done with [this policy file](policy/application1-users.yml).
+Apply it using the following command :
+
+```
+conjur policy load -b app/application1 -f application1-users.yml
+```
+
+Finally, we will define local groups for dev-based (dev) and ops-based (stg/prd) environment policies. The purpose of defining
+local group is to be able to reuse the same policy templates across different applications/environments (we will use relative paths
+to groups with the same name when defining ownership and permissions.
+
+We define one [policy file for dev](policy/dev-local-groups.yml) and one [policy file for ops](policy/ops-local-groups.yml). They define :
+- A group for workloads which will have read access
+- A group for readers (workloads + people) which will have read access
+- A group for owners which will have read/write access
+
+`readers` and `owners` groups will contain groups defined in the parent policy file.
+
+You can apply those by running the following :
+
+```
+conjur policy load -b app/application1/dev -f dev-local-groups.yml
+conjur policy load -b app/application1/stg -f ops-local-groups.yml
+conjur policy load -b app/application1/prd -f ops-local-groups.yml
+```
+
+Your ACL setup is complete for application1 and you no longer need to run commands as Bob Spade (the administrator).
+Next step will be to add credentials.
+
+#### Adding credentials
+
+To be continued ...

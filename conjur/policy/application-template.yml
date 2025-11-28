@@ -1,0 +1,82 @@
+# Group for users with read-write access to DEV credentials
+- !group
+  id: dev-owners
+  owner: !group /admin
+# Group for users with read-write access to STG/PRD credentials
+- !group
+  id: ops-owners
+  owner: !group /admin
+# Group for users with at least read-only access to DEV credentials
+- !group
+  id: dev-users
+  owner: !group /admin
+# Group for users with at least read-only access to STG/PRD credentials
+- !group
+  id: ops-users
+  owner: !group /admin
+# Group for users with any access to DEV credentials
+- !group
+  id: all-dev
+  owner: !group /admin
+# Group for users with any access to STG/PRD credentials
+- !group
+  id: all-ops
+  owner: !group /admin
+# Group for users with any access on this application
+- !group
+  id: all-members
+  owner: !group /admin
+# Define memberships between groups
+- !grant
+  role: !group dev-owners
+  members: !group /admin
+- !grant
+  role: !group ops-owners
+  members: !group /admin
+- !grant
+  role: !group dev-users
+  members: !group dev-owners
+- !grant
+  role: !group ops-users
+  members: !group ops-owners
+- !grant
+  role: !group all-dev
+  members:
+    - !group dev-owners
+    - !group dev-users
+- !grant
+  role: !group all-ops
+  members:
+    - !group ops-owners
+    - !group ops-users
+- !grant
+  role: !group all-members
+  members:
+    - !group all-dev
+    - !group all-ops
+# DEV environment policy
+- !policy
+  id: dev
+  owner: !group dev-owners
+# STG environment policy
+- !policy
+  id: stg
+  owner: !group ops-owners
+# PRD environment policy
+- !policy
+  id: prd
+  owner: !group ops-owners
+# Policies are visible to anybody who have access to the application.
+# We will mask sensitive data in sub-policies.
+- !permit
+  role: !group all-members
+  privileges: [read, execute]
+  resource: !policy dev
+- !permit
+  role: !group all-members
+  privileges: [read, execute]
+  resource: !policy stg
+- !permit
+  role: !group all-members
+  privileges: [read, execute]
+  resource: !policy prd

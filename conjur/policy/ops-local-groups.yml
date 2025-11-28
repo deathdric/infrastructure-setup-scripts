@@ -1,0 +1,21 @@
+- !group
+  id: workloads
+  owner: !group ../ops-owners
+- !group
+  id: readers
+  owner: !group ../ops-owners
+- !group
+  id: owners
+  owner: !group ../ops-owners
+- !group
+  id: shared-readers
+  owner: !group ../ops-owners
+- !grant
+  role: !group owners
+  members:
+    - !group ../ops-owners
+- !grant
+  role: !group readers
+  members:
+    - !group workloads
+    - !group ../ops-users

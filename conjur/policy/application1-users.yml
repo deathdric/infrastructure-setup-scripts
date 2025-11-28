@@ -1,0 +1,18 @@
+# When using `/`, it means that we are using absolute paths in conjur object hierarchy, otherwise it woult use
+# relative paths.
+- !grant
+  role: !group dev-owners
+  members:
+    - !user /usrjfisherman
+- !grant
+  role: !group ops-owners
+  members:
+    - !user /usrmmchill
+- !grant
+  role: !group dev-users
+  members:
+    - !user /usraheart
+- !grant
+  role: !group ops-users
+  members:
+    - !user /usrrlakedweller
