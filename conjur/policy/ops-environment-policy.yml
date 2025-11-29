@@ -1,0 +1,33 @@
+# Group fow workloads, expect to add hosts/layers here
+# It will have read access to policies.
+- !group
+  id: workloads
+  owner: !group ../ops-owners
+# Group for all readers
+- !group
+  id: readers
+  owner: !group ../ops-owners
+# Group which will define the owners of environment policies
+- !group
+  id: owners
+  owner: !group ../ops-owners
+# Membership of the owner group. You should not have to modify it. Update the ops-owners membership instead.
+- !grant
+  role: !group owners
+  members:
+    - !group ../ops-owners
+# Membership of the readers group. You should not have to modify it. Update the ops-users or workloads membership instead.
+- !grant
+  role: !group readers
+  members:
+    - !group workloads
+    - !group ../ops-users
+# Create the parent credentials policy
+- !policy
+  id: credentials
+  owner: !group owners
+# Allow all application stakeholders to access it.
+- !permit
+  role: !group ../all-members
+  privileges: [read, execute]
+  resource: !policy credentials

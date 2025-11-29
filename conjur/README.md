@@ -14,7 +14,7 @@ by nginx.
 
 I recommend to only keep docker for conjur, mostly because you don't have much choice on that matter,
 but use an external postgresql database (which has the merit to have the data survive a restart),
-and an external nginx instance (which is not that much harder to setup than the docker version). Same
+and an external nginx instance (which is not that much harder to set up than the docker version). Same
 for the client : I'll use the official binary which I can run from any host.
 
 This setup may be harder to put in place than a 'docker-compose -d up', but it will be more convenient to use
@@ -46,7 +46,7 @@ ALTER SCHEMA public OWNER TO conjur;
 ```
 
 So we have created a `conjur` database and a `conjur` user and granted it all privileges (except DB ownership).
-We still need to set a password for the conjur user (I'll use `hunter2` as an example but you should choose a more
+We still need to set a password for the conjur user (I'll use `hunter2` as an example, but you should choose a more
 complex one ;) ) :
 
 ```
@@ -80,7 +80,7 @@ sudo usermod -a -G docker your_user_login
 (replace `your_user_login` with the value of your linux login).
 
 Next, we'll pull the docker image. Doing operations such as `docker run` will pull it
-automatically anyways, but it's also a good way to check that you can run docker commands
+automatically anyway, but it's also a good way to check that you can run docker commands
 with little impact on your setup :
 
 ```
@@ -127,7 +127,7 @@ Once you're ready, run the following :
 docker-compose up -d
 ```
 
-If you want to check that conjur started sucessfully, run `docker logs conjur` (or `docker logs conjur -f`).
+If you want to check that conjur started successfully, run `docker logs conjur` (or `docker logs conjur -f`).
 If you have logs like this, it's good news :
 
 ```
@@ -144,7 +144,7 @@ and check that you have the conjur welcome page.
 #### Nginx setup
 
 Using a reverse proxy may sound overkill, but we'll need it at list in order to expose a TLS endpoint (an HTTPS load balancer
-with proper certificates may also do the job). For convenience we'll install it on the same host as conjur (on a production setup
+with proper certificates may also do the job). For convenience, we'll install it on the same host as conjur (on a production setup
 we would have used different hosts).
 
 Let's install nginx :
@@ -198,7 +198,7 @@ Keep the admin API key safe and do not lose it : you're gonna need it for a whil
 #### Install the conjur client
 
 We'll use the command line client for tests and policy setup, so let's install it. You can find the binaries in the [conjur project on GitHub](https://github.com/cyberark/conjur-cli-go),
-(go to the releases section and select the binary appropriate to your system. For information I used the version 9.1.0 of the command line.
+(go to the releases section and select the binary appropriate to your system). For information, I used the version 9.1.0 of the command line.
 
 Run the following command (change `https://conjur` to the URL of your conjur host and `deathshadow` to the name of the account
 you created).
@@ -229,7 +229,7 @@ Don't worry, we'll create the policies right away !
 
 #### Setting the root policy
 
-Now that conjur is setup and we have an administrator account, we need to bootstrap some policies.
+Now that conjur is set up and that we have an administrator account, we need to bootstrap some policies.
 The first policy to create is the root policy (which all other policies will be derived from).
 
 Root policy is defined in a [YAML file](policy/root.yml) which providers :
@@ -262,7 +262,7 @@ Next step is to configure LDAP authentication and add some users.
 
 #### Configure LDAP authentication
 
-I assume that you have setup an LDAP server following [this procedure](../ldap/README.md) and have created the same people
+I assume that you have set up an LDAP server following [this procedure](../ldap/README.md) and have created the same people
 accounts. In order to make those accounts available on conjur, we need to :
 
 - Create those users in conjur
@@ -333,23 +333,23 @@ Finally, login as usrbspade using the following command :
 conjur login -i usrbspade
 ```
 
-Input the password of the userbspade account when asked. If you have the `Logged in` message, you won. Good news is :
+Input the password of the usrbspade account when asked. If you have the `Logged in` message, you won. Good news is :
 you won't need to use the `admin` account for a while now.
 
-If you need to use an API key for this used and you don't have it, you can reset the API key by running `conjur user rotate-api-key`.
-This will create a new API key ready to use. However it will have one side effect : you will be logged out (you can still
+If you need to use an API key for this used, but you don't have it, you can reset the API key by running `conjur user rotate-api-key`.
+This will create a new API key ready to use. However, it will have one side effect : you will be logged out (you can still
 log in afterward using your LDAP credentials).
 
 ### Application policies setup
 
 #### Environments and groups
 
-We will not setup the policy for our first application, called `application1`.
+We will not set up the policy for our first application, called `application1`.
 
 All application policies will have the `app` parent policy and will be owned by the `admin` group. We will later define
 subpolicies owned by dev and ops users which wil allow them to set and fetch their credentials.
 
-First, let's setup the root `application1` policy defined in [this file](policy/application1.yml). Run the following
+First, let's set up the root `application1` policy defined in [this file](policy/application1.yml). Run the following
 command with the `usrbspade` user :
 
 ```
@@ -363,7 +363,7 @@ for any created application. It will define :
 - The `dev-owners` group, which will have ownership of `dev` credentials
 - The `dev-users` group, which will have access to the `dev` credentials
 - The `ops-owners` group, which will have ownership of `stg` and `prd` credentials
-- The `ops-users` group, which will have access to the `stg` and `prd4` credentials
+- The `ops-users` group, which will have access to the `stg` and `prd` credentials
 - Composite groups like `all-dev`, `all-ops` and `all-users`
 
 Note that all groups defined above are local to the application (e.g. : the `dev-owners` group fully qualified name is
@@ -375,7 +375,7 @@ In order to update the policy, run the following :
 conjur policy load -b app/application1 -f application-template.yml
 ```
 
-Now that we have defined groups, we need to setup membership. This will be done with [this policy file](policy/application1-users.yml).
+Now that we have defined groups, we need to set up membership. This will be done with [this policy file](policy/application1-users.yml).
 Apply it using the following command :
 
 ```
@@ -383,27 +383,137 @@ conjur policy load -b app/application1 -f application1-users.yml
 ```
 
 Finally, we will define local groups for dev-based (dev) and ops-based (stg/prd) environment policies. The purpose of defining
-local group is to be able to reuse the same policy templates across different applications/environments (we will use relative paths
-to groups with the same name when defining ownership and permissions.
+local groups is to be able to reuse the same policy templates across different applications/environments (we will use relative paths
+to groups with the same name when defining ownership and permissions).
 
-We define one [policy file for dev](policy/dev-local-groups.yml) and one [policy file for ops](policy/ops-local-groups.yml). They define :
+We will also define a parent policy for the environment credentials, which will make maintaining the list of credentials easier. If for some reason
+you need to delete a credential, you'll need to replace its parent policy (with an up-to-date file which doesn't contain
+the policy to delete). You don't want to waste your time reapplying groups definitions and membership, to having a dedicated
+parent policy will provide more isolation and less opportunities to mess up.
+
+We define one [policy file for dev](policy/dev-environment-policy.yml) and one [policy file for ops](policy/ops-environment-policy.yml). They define :
 - A group for workloads which will have read access
 - A group for readers (workloads + people) which will have read access
 - A group for owners which will have read/write access
+- The parent policy for credentials, named `credentials`
+
 
 `readers` and `owners` groups will contain groups defined in the parent policy file.
 
 You can apply those by running the following :
 
 ```
-conjur policy load -b app/application1/dev -f dev-local-groups.yml
-conjur policy load -b app/application1/stg -f ops-local-groups.yml
-conjur policy load -b app/application1/prd -f ops-local-groups.yml
+conjur policy load -b app/application1/dev -f dev-environment-policy.yml
+conjur policy load -b app/application1/stg -f ops-environment-policy.yml
+conjur policy load -b app/application1/prd -f ops-environment-policy.yml
 ```
 
-Your ACL setup is complete for application1 and you no longer need to run commands as Bob Spade (the administrator).
-Next step will be to add credentials.
+We could still be running conjur commands as Bob Spade (the administrator), but to prove that our ACL setup works as intended we will switch the user
+to John Fisherman who has dev ownership on application1. Run the following commands :
+```
+conjur logout
+conjur login -i usrjfisherman
+conjur list
+```
+
+The output of the last command should look like the following :
+
+```
+[
+  "deathshadow:group:app/application1/dev/owners",
+  "deathshadow:group:app/application1/dev/readers",
+  "deathshadow:group:app/application1/dev/workloads",
+  "deathshadow:policy:app/application1/dev",
+  "deathshadow:policy:app/application1/dev/credentials",
+  "deathshadow:policy:app/application1/prd",
+  "deathshadow:policy:app/application1/prd/credentials",
+  "deathshadow:policy:app/application1/stg",
+  "deathshadow:policy:app/application1/stg/credentials",
+  "deathshadow:webservice:conjur/authn-ldap/deathshadow-ldap-server"
+]
+
+```
+
+As you can see, you mostly have access to the application1 dev policies/groups.
+Next step is to add credentials.
 
 #### Adding credentials
 
-To be continued ...
+We will register the credentials of the database service accounts configured when we [installed the Postgresql server](../postgresql/README.md).
+Only the following accounts will be used :
+
+- The application1 adm account for database migration scripts
+- The application1 readwrite account for standard CRUD operations at runtime
+
+The [following file](policy/application1-dev-credentials.yml) defines 2 almost empty policies along with their initial privileges.
+While the file name clearly indicates that it's for application1 dev environment, you can apply it to other applications of environments
+if you have the same policy names convention (`db-adm` and `db-rw`). Also, if you need to add a third credential, you can do it in
+another policy file. Whether you use one file per credential policy or group different policies in the same file is up to you.
+
+Run the following to create the policies :
+
+```
+conjur policy load -b app/application1/dev/credentials -f application1-dev-credentials.yml
+```
+
+Now that the policies are created, we need to configure their access rights. In order to do that, I defined a
+[generic credential policy](policy/login-password-credential.yml) which can be applied to any application.
+You probably already have seen a pattern : some policy files are generic (using standardized relative group names for ACLs)
+while some have hardcoded names (and usually lightweight). No need to explain that you'll be better off setting as much "logic"
+as you can in generic policies.
+
+The variables are gathered in 2 categories : sensitive and non-sensitive. There is a reason : you may want to grant a broader access
+to some generic information like a variable explaining what this policy is used for, while restricting access to the account password.
+In this sample I defined 2 non-sensitive variables : `info` and `login` and one sensitive variable : `password`. Whether the
+login of an account is sensitive information is up to debate, but since we are using service accounts with standard, easily
+guessable names, sensitivity is a moot point here. Do not forget that 'non-sensitive' variables can only be accessed by application1
+stakeholders (dev, ops and workloads).
+
+To create the variables, run the following commands :
+
+```
+conjur policy load -b app/application1/dev/credentials/db-adm -f login-password-credential.yml
+conjur policy load -b app/application1/dev/credentials/db-rw -f login-password-credential.yml
+```
+
+Finally, we need to set the variables defined in those policies. To do that run the following commands (replace the
+password values of course) :
+
+```
+conjur variable set -i app/application1/dev/credentials/db-adm/info -v 'Database Admin Account'
+conjur variable set -i app/application1/dev/credentials/db-adm/login -v svcapplication1admd
+conjur variable set -i app/application1/dev/credentials/db-adm/password -v changeit
+conjur variable set -i app/application1/dev/credentials/db-rw/info -v 'Database Read Write Account'
+conjur variable set -i app/application1/dev/credentials/db-rw/login -v svcapplication1rwd
+conjur variable set -i app/application1/dev/credentials/db-rw/password -v changeit
+```
+
+Now you have credentials ready to use.
+
+#### Testing credentials
+
+There is a [sample spring boot application](https://github.com/deathdric/spring-boot-sample-application1) which has conjur integration.
+Most of the configuration should be ready for usage (except the database server name and the conjur server name). We will only
+describe howto setup the test user.
+
+We could still use John Fisherman, but he still has more privileges that needed (he can modify the credentials). We'll use
+Alice Heart (who only has read-only dev access for application1).
+
+Run the following commands :
+```
+conjur logout
+conjur login -i usraheart
+```
+
+You can check that you can have access to the db-rw password using the following command :
+```
+conjur variable get -i app/application1/dev/credentials/db-rw/password
+```
+
+For the spring boot application, we'll use api-key login. Run `conjur user rotate-api-key` if you don't have it (and log in again afterward).
+then set the following environment variables :
+- CONJUR_AUTHN_LOGIN : usraheart
+- CONJUR_AUTHN_API_KEY : value of the API key you retrieved.
+
+With this you should be able to run the sample. This was quite a lot to set up, but now we're done ;)
+
