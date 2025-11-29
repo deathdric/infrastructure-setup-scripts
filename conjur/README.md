@@ -336,7 +336,7 @@ conjur login -i usrbspade
 Input the password of the usrbspade account when asked. If you have the `Logged in` message, you won. Good news is :
 you won't need to use the `admin` account for a while now.
 
-If you need to use an API key for this used, but you don't have it, you can reset the API key by running `conjur user rotate-api-key`.
+If you need to use an API key for this user, but you don't have it, you can reset the API key by running `conjur user rotate-api-key`.
 This will create a new API key ready to use. However, it will have one side effect : you will be logged out (you can still
 log in afterward using your LDAP credentials).
 
@@ -344,7 +344,7 @@ log in afterward using your LDAP credentials).
 
 #### Environments and groups
 
-We will not set up the policy for our first application, called `application1`.
+We will now set up the policy for our first application, called `application1`.
 
 All application policies will have the `app` parent policy and will be owned by the `admin` group. We will later define
 subpolicies owned by dev and ops users which wil allow them to set and fetch their credentials.
